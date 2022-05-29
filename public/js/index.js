@@ -19,7 +19,7 @@ async function loadGames() {
                 <i class="fa fa-ban icon"></i>
                 </a>
             </div>
-        `
+        `;
     }
 
     var html = `
@@ -32,43 +32,52 @@ async function loadGames() {
 }
 
 async function loadGame(gid) {
+    document.getElementById('data-details').innerHTML = '<div class="empty-box">Select a player to show</div>';
 
     let response = await fetch(`/api/get/game?gid=${gid}`);
     var game = await response.json();
     game = game['game'];
     
     var players = '';
-    for (let p of Object.keys(game.players)) {
-        var player = game.players[p];
+    sorted_players = Object.values(game.players).sort(function compareFn(a, b) {
+        if (a.score < b.score) return 1;
+        if (a.score > b.score) return -1;
+        return 0;
+    })
+
+    for (let i=0; i<sorted_players.length; i++) {
+        var player = sorted_players[i];
         players += `
             <div class="text-and-icons">
-                <a onclick="loadPlayerDetails('${gid}', '${p}')">
+                <a onclick="loadPlayerDetails('${gid}', '${player.id}')">
                     <li class="clickable-text">${player.nick}  -  ${player.score} points</li>
                 </a>
-                <a title="Kick player" onclick="removePlayer('${gid}', '${p}')">
+                <a title="Kick player" onclick="removePlayer('${gid}', '${player.id}')">
                     <i class="fa fa-ban icon"></i>
                 </a>
             </div>
-        `
+        `;
     }
 
     var html = `
-        <div class="game-data-title">Game: ${game.nick}</div>
+    <div class="game-data-title">Game: ${game.nick}</div>
+    <div class="game-data-display">
+    <div class="deck-left-info">
         <br><br>
         <div class="text-and-icons">
             <span>DECK INFO</span>
-            <a title="Shuffle deck"><i class="fa fa-random icon"></i></a>
+            <a title="Shuffle deck" onclick="shuffleDeck('${gid}')"><i class="fa fa-random icon"></i></a>
             <a title="Add deck" onclick="addDeck('${gid}')"><i class="fa fa-plus icon"></i></a>
         </div>
         <div class="deck-info">
             <span>Decks in this game: ${game.decks} (${game.decks * 52} cards)</span>
-            <span>Undealt cards: ${game.undealt.length} cards</span>
             <span>Dead cards: ${game.deadCards} cards</span>
+            <span>Undealt cards: ${game.undealt.length} cards</span>
             <ul>
-                <li>24 hearts</li>
-                <li>26 spades</li>
-                <li>25 clubs</li>
-                <li>21 diamonds</li>
+                <li>${game.cHearts} hearts</li>
+                <li>${game.cSpades} spades</li>
+                <li>${game.cClubs} clubs</li>
+                <li>${game.cDiamonds} diamonds</li>
             </ul>
         </div>
         
@@ -83,10 +92,45 @@ async function loadGame(gid) {
             <ul>
                 ${players}
             </ul>
-        </div>
-        
-    `
+        </div>   
+    </div>`;
 
+    response = await fetch(`/api/detail/deck?gid=${gid}`);
+    var result = await response.json();
+    let count = result.count;
+
+    html += 
+    `<div class="deck-det">
+        <br>
+        <div class="cards-by-type">
+    `;
+
+    for (var suit of Object.keys(count)) {
+        switch (suit) {
+            case 'hearts':
+                symbol = '♥';
+                html += `<div class="cards-by-type-block red-card"><strong><span>${suit} ♥</span></strong>`
+                break;
+            case 'clubs':
+                symbol = '♣';
+                html += `<div class="cards-by-type-block black-card"><strong><span>${suit} ♣</span></strong>`
+                break;
+            case 'diamonds':
+                symbol = '♦';
+                html += `<div class="cards-by-type-block red-card"><strong><span>${suit} ♦</span></strong>`
+                break;
+            case 'spades':
+                symbol = '♠';
+                html += `<div class="cards-by-type-block black-card"><strong><span>${suit} ♠</span></strong>`
+                break;
+        }
+        
+        for (var face of Object.keys(count[suit])) {
+            html += `<span><strong>${face}:</strong> ${count[suit][face]} left</span>`
+        }
+        html += `</div>`
+    }
+    html += `</div>`
     document.getElementById('game-data').innerHTML = html;
 }
 
@@ -146,7 +190,47 @@ async function loadPlayerDetails(gid, pid) {
     document.getElementById('data-details').innerHTML = html;
 }
 
-async function loadDeckDetails(gid) {}
+async function loadDeckDetails(gid) {
+    let response = await fetch(`/api/detail/deck?gid=${gid}`);
+    var result = await response.json();
+    let count = result.count;
+
+    console.log(count)
+    
+    var html = `
+        <div class="game-data-title">Game Deck</div>
+        <br>
+        <div class="cards-by-type">
+    `;
+
+    for (var suit of Object.keys(count)) {
+        switch (suit) {
+            case 'hearts':
+                symbol = '♥';
+                html += `<div class="cards-by-type-block red-card"><h4>${suit} ♥</h4>`
+                break;
+            case 'clubs':
+                symbol = '♣';
+                html += `<div class="cards-by-type-block black-card"><h4>${suit} ♣</h4>`
+                break;
+            case 'diamonds':
+                symbol = '♦';
+                html += `<div class="cards-by-type-block red-card"><h4>${suit} ♦</h4>`
+                break;
+            case 'spades':
+                symbol = '♠';
+                html += `<div class="cards-by-type-block black-card"><h4>${suit} ♠</h4>`
+                break;
+        }
+        
+        for (var face of Object.keys(count[suit])) {
+            html += `<span><strong>${face}:</strong> ${count[suit][face]} left</span>`
+        }
+        html += `</div>`
+    }
+
+    document.getElementById('data-details').innerHTML = html;
+}
 
 async function addGame(nick) {
     console.log('ADD GAME');
@@ -168,7 +252,7 @@ async function removeGame(gid) {
     var result = await response.json();
     console.log(result);
 
-    document.getElementById('game-data').innerHTML = '';
+    document.getElementById('game-data').innerHTML = '<div class="empty-box">Select a game to show</div>';
     loadGames();
 }
 
@@ -178,6 +262,16 @@ async function addDeck(gid) {
     let response = await fetch(`/api/add/deck?gid=${gid}`);
     var result = await response.json();
     console.log(result);
+
+    loadGame(gid);
+}
+
+async function shuffleDeck(gid) {
+    console.log('SHUFFLE DECK');
+
+    let response = await fetch(`/api/shuffle/deck?gid=${gid}`);
+    var result = await response.json();
+    alert(result.result);
 
     loadGame(gid);
 }
@@ -201,7 +295,7 @@ async function removePlayer(gid, pid) {
     let response = await fetch(`/api/remove/player?gid=${gid}&pid=${pid}`);
     var result = await response.json();
 
-    document.getElementById('data-details').innerHTML = '';
+    document.getElementById('data-details').innerHTML = '<div class="empty-box">Select a player to show</div>';
     loadGame(gid);
 }
 
@@ -211,7 +305,10 @@ async function dealCards(gid, pid) {
 
     let response = await fetch(`/api/add/player_cards?gid=${gid}&pid=${pid}&qt=${qt}`);
     var result = await response.json();
+    if(result.result != 'success') alert(result.result);
+    else {
+        loadGame(gid);
+        loadPlayerDetails(gid, pid);
+    }
 
-    loadGame(gid);
-    loadPlayerDetails(gid, pid);
 }
