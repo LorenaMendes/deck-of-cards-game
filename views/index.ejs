@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div>
+        <div class="content">
+            <div class="left">
+                <div id="game-data" class="game-data">
+                    
+                </div>
+                <div class="data-details"></div>
+            </div>
+
+            <div class="right">
+                <div class="item-with-add">
+                    <p class="section-name">GAMES</p>
+                </div>
+                <div id="games-list" class="games-list">
+                    <ul>
+                        <% for(key of Object.keys(GAMES)) { %>
+                            <div class="text-and-icons">
+                                <li><a onclick="loadGame('<%= GAMES[key].id %>')">
+                                    <%= GAMES[key].nick %>
+                                </a></li>
+                                <a title="Remove game" onclick="removeGame('<%= GAMES[key].id %>')"><i class="fa fa-ban icon"></i></a>
+                            </div>
+                        <% } %>
+                    </ul>
+                </div>
+                <div class="add-player">
+                    <input id="gameNick" type="text" class="form-control input-add" placeholder="new game"/>
+                    <a title="Add game" onclick="addGame()"><i class="fa fa-plus icon"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/public/js/index.js"></script>
+</body>
