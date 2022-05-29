@@ -323,7 +323,6 @@ app.get('/api/detail/deck', (req, res) => {
     var gid = req.query.gid;
     
     let count = GAMES[gid].countSuitValue();
-    console.log(JSON.stringify(count))
     
     res.json({
         count: count
