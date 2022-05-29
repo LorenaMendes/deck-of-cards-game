@@ -35,4 +35,4 @@ npm install
 npm start
 ```
 
-6. Access the application at [localhost:3333](url)
+6. Access the application at http://localhost:3333.
