@@ -240,9 +240,8 @@ async function addGame(nick) {
 
     let response = await fetch(`/api/new/game?nick=${nick}`);
     var result = await response.json();
-    console.log(result);
-
-    loadGames();
+    if(result.message != 'success') alert(result.message);
+    else loadGames();
 }
 
 async function removeGame(gid) {
@@ -250,7 +249,6 @@ async function removeGame(gid) {
 
     let response = await fetch(`/api/remove/game?gid=${gid}`);
     var result = await response.json();
-    console.log(result);
 
     document.getElementById('game-data').innerHTML = '<div class="empty-box">Select a game to show</div>';
     loadGames();
@@ -261,9 +259,8 @@ async function addDeck(gid) {
 
     let response = await fetch(`/api/add/deck?gid=${gid}`);
     var result = await response.json();
-    console.log(result);
-
-    loadGame(gid);
+    if(result.message != 'success') alert(result.message);
+    else loadGame(gid);
 }
 
 async function shuffleDeck(gid) {
@@ -271,7 +268,7 @@ async function shuffleDeck(gid) {
 
     let response = await fetch(`/api/shuffle/deck?gid=${gid}`);
     var result = await response.json();
-    alert(result.result);
+    alert(result.message);
 
     loadGame(gid);
 }
@@ -284,7 +281,7 @@ async function addPlayer(gid) {
 
     let response = await fetch(`/api/add/player?gid=${gid}&nick=${nick}`);
     var result = await response.json();
-    if(result.result != 'success') alert(result.result);
+    if(result.message != 'success') alert(result.message);
 
     loadGame(gid);
 }
@@ -305,7 +302,7 @@ async function dealCards(gid, pid) {
 
     let response = await fetch(`/api/add/player_cards?gid=${gid}&pid=${pid}&qt=${qt}`);
     var result = await response.json();
-    if(result.result != 'success') alert(result.result);
+    if(result.message != 'success') alert(result.message);
     else {
         loadGame(gid);
         loadPlayerDetails(gid, pid);
