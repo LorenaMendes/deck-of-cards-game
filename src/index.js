@@ -52,7 +52,9 @@ class Deck {
 
 class Game {
     constructor(nick){
-        this.deck = [];
+        this.undealt = [];
+        this.decks = 0
+        this.deadCards = 0;
         this.players = {};
         this.id = uuidv4();
         this.nick = nick;
@@ -65,13 +67,28 @@ class Game {
     removePlayer(pid) {
         delete this.players[pid];
     }
+
+    addDeck() {
+        var deck = new Deck();
+        this.undealt.push(...deck.cards);
+        this.decks++;
+    }
 }
 
 class Player {
     constructor(nick){
-        this.cards = null;
+        this.cards = [];
         this.id = uuidv4();
         this.nick = nick;
+        this.score = 0;
+    }
+
+    getScore() {
+        var score = 0;
+        for(var card of this.cards){
+            score += card.value;
+        }
+        this.score = score;
     }
 }
 
@@ -131,13 +148,25 @@ app.get('/api/remove/game', (req, res) => {
 });
 
 /**
+ * GET A PLAYER
+ */
+app.get('/api/get/player', (req, res) => {
+    var gid = req.query.gid;
+    var pid = req.query.pid;
+    
+    return res.json({
+        player: GAMES[gid].players[pid]
+    });
+});
+
+/**
  * ADD A PLAYER
  */
 app.get('/api/add/player', (req, res) => {
     var gid = req.query.gid;
     var nick = req.query.nick;
     
-    if(Object.keys(PLAYERS).length >= 4){
+    if(Object.keys(GAMES[gid].players).length >= 4){
         return res.json({
             result: 'No more players allowed in this game!'
         });
@@ -160,9 +189,32 @@ app.get('/api/remove/player', (req, res) => {
     var gid = req.query.gid;
     var pid = req.query.pid;
     
+    GAMES[gid].deadCards += GAMES[gid].players[pid].cards.length;
+
     GAMES[gid].removePlayer(pid);
     
     delete PLAYERS[pid];
+    
+    res.json({
+        result: 'success'
+    });
+});
+
+/**
+ * DEAL CARDS
+ */
+app.get('/api/add/player_cards', (req, res) => {
+    var gid = req.query.gid;
+    var pid = req.query.pid;
+    var qt = req.query.qt;
+
+    if(qt > GAMES[gid].undealt.length) qt = GAMES[gid].undealt.length;
+    
+    for (let i = 0; i < qt; i++) {
+        var top = GAMES[gid].undealt.pop();
+        GAMES[gid].players[pid].cards.push(top);       
+    }
+    GAMES[gid].players[pid].getScore();
     
     res.json({
         result: 'success'
@@ -175,8 +227,7 @@ app.get('/api/remove/player', (req, res) => {
 app.get('/api/add/deck', (req, res) => {
     var gid = req.query.gid;
     
-    var deck = new Deck();
-    GAMES[gid].deck.push(...deck.cards);
+    GAMES[gid].addDeck();
     
     res.json({
         result: 'success'
