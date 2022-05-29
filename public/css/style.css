@@ -1,13 +1,23 @@
 body {
     /* background-image: url("https://img.freepik.com/free-photo/abstract-background-green-felt-casino-table_266732-23795.jpg?w=2000"); */
     background-color: green;
-    background-repeat : no-repeat;
+    background-repeat: no-repeat;
 }
 
-.content { 
+.content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.empty-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 3px solid green;
+    font-size: 50px;
+    color: cornsilk;
 }
 
 .clickable-text {
@@ -16,12 +26,12 @@ body {
     cursor: pointer;
 }
 
-.left { 
+.left {
     display: flex;
     flex-direction: column;
     width: 70vw;
     border-right: solid 1px white;
-    padding-left: 15px;
+    padding: 15px;
 }
 
 .game-data {
@@ -35,13 +45,17 @@ body {
 .game-data-title {
     display: flex;
     justify-content: center;
-    font-size: 40px;
+    font-size: 50px;
     color: white;
 }
 
 .deck-info {
     display: flex;
     flex-direction: column;
+}
+
+.deck-left-info {
+    height: 27vw;
 }
 
 .text-and-icons {
@@ -70,6 +84,7 @@ body {
 .data-details {
     padding-top: 15px;
     font-family: 'Hubballi', cursive;
+    height: 37vh;
 }
 
 .player-cards-container {
@@ -77,7 +92,7 @@ body {
     flex-direction: row;
     max-width: 69vw;
     height: 180px;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 .card-img {
@@ -120,7 +135,31 @@ body {
     color: black;
 }
 
-.right { 
+.cards-by-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 25px;
+    background-color: white;
+    padding: 20px;
+    margin-right: 25px;
+}
+
+.cards-by-type-block {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.game-data-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.right {
     display: flex;
     flex-direction: column;
     width: 20vw;
