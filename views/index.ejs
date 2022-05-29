@@ -13,12 +13,16 @@
                 <div id="game-data" class="game-data">
                     
                 </div>
-                <div class="data-details"></div>
+                <div id="data-details" class="data-details">
+
+                </div>
             </div>
 
             <div class="right">
-                <div class="item-with-add">
-                    <p class="section-name">GAMES</p>
+                <p class="section-name">GAMES</p>
+                <div class="add-game">
+                    <input id="gameNick" type="text" class="form-control input-add" placeholder="new game"/>
+                    <a title="Add game" onclick="addGame()"><i class="fa fa-plus icon"></i></a>
                 </div>
                 <div id="games-list" class="games-list">
                     <ul>
@@ -31,10 +35,6 @@
                             </div>
                         <% } %>
                     </ul>
-                </div>
-                <div class="add-player">
-                    <input id="gameNick" type="text" class="form-control input-add" placeholder="new game"/>
-                    <a title="Add game" onclick="addGame()"><i class="fa fa-plus icon"></i></a>
                 </div>
             </div>
         </div>
