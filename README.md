@@ -19,8 +19,9 @@ To run the application, you need to follow the steps below:
 ```bash
 git clone https://github.com/LorenaMendes/deck-of-cards-game.git
 ```
-2. Install the dependencies
+2. Go tho the cloned directory and install the dependencies
 ```bash
+cd deck-of-cards-game
 npm install
 ```
 
