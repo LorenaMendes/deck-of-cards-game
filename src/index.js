@@ -167,10 +167,17 @@ app.get('/api/get/game', (req, res) => {
 app.get('/api/new/game', (req, res) => {
     var nick = req.query.nick;
     
+    if(Object.keys(GAMES).length >= 25){
+        return res.json({
+            message: 'Limit of 25 games reached!',
+        });
+    }
+
     var game = new Game(nick);
     GAMES[game.id] = game;
 
     res.json({
+        message: 'success',
         game: game,
     });
 });
@@ -184,7 +191,7 @@ app.get('/api/remove/game', (req, res) => {
     delete GAMES[gid];
 
     res.json({
-        result: 'success'
+        message: 'success'
     });
 });
 
@@ -220,7 +227,7 @@ app.get('/api/add/player', (req, res) => {
     
     if(Object.keys(GAMES[gid].players).length >= 4){
         return res.json({
-            result: 'No more players allowed in this game!'
+            message: 'No more players allowed in this game!'
         });
     }
 
@@ -229,7 +236,7 @@ app.get('/api/add/player', (req, res) => {
     GAMES[gid].addPlayer(player);
     
     return res.json({
-        result: 'success'
+        message: 'success'
     });
 });
 
@@ -245,7 +252,7 @@ app.get('/api/remove/player', (req, res) => {
     GAMES[gid].removePlayer(pid);
     
     res.json({
-        result: 'success'
+        message: 'success'
     });
 });
 
@@ -259,7 +266,7 @@ app.get('/api/add/player_cards', (req, res) => {
 
     if(GAMES[gid].undealt.length == 0){
         return res.json({
-            result: 'No cards on the deck!'
+            message: 'No cards on the deck!'
         });
     }
 
@@ -268,7 +275,7 @@ app.get('/api/add/player_cards', (req, res) => {
     GAMES[gid].dealCards(pid, qt);
 
     res.json({
-        result: 'success'
+        message: 'success'
     });
 });
 
@@ -278,10 +285,15 @@ app.get('/api/add/player_cards', (req, res) => {
 app.get('/api/add/deck', (req, res) => {
     var gid = req.query.gid;
     
+    if(GAMES[gid].decks >= 10){
+        return res.json({
+            message: 'Maximum of 10 decks reached for this game!'
+        });
+    }
     GAMES[gid].addDeck();
     
     res.json({
-        result: 'success'
+        message: 'success'
     });
 });
 
@@ -293,14 +305,14 @@ app.get('/api/shuffle/deck', (req, res) => {
 
     if(GAMES[gid].undealt.length == 0){
         return res.json({
-            result: 'No cards to shuffle!'
+            message: 'No cards to shuffle!'
         });
     }
     
     GAMES[gid].shuffleDeck();
     
     res.json({
-        result: 'Deck shuffled!'
+        message: 'Deck shuffled!'
     });
 });
 
