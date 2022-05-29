@@ -10,6 +10,12 @@ body {
     justify-content: space-between;
 }
 
+.clickable-text {
+    color: orange;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .left { 
     display: flex;
     flex-direction: column;
@@ -48,6 +54,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-top: 15px;
 }
 
 .input-add {
@@ -60,29 +67,79 @@ body {
     margin-left: 15px;
 }
 
+.data-details {
+    padding-top: 15px;
+    font-family: 'Hubballi', cursive;
+}
+
+.player-cards-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 69vw;
+    height: 180px;
+    overflow-x: scroll;
+}
+
+.card-img {
+    width: 100px;
+    margin-right: 5px;
+}
+
+.deal-cards-menu {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    margin-right: 15px;
+    justify-content: right;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+    height: 150px;
+    background-color: white;
+    margin-right: 5px;
+}
+
+.card-face {
+    font-size: 50px;
+}
+
+.card-symbol {
+    font-size: 40px;
+}
+
+.red-card {
+    color: red;
+}
+
+.black-card {
+    color: black;
+}
+
 .right { 
     display: flex;
     flex-direction: column;
+    width: 20vw;
     height: 98vh;
     padding-right: 70px;
 }
 
-.item-with-add {
+.add-game {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    width: 200px;
 }
 
 .section-name {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 6px;
     color: white;
     font-family: 'Hubballi', cursive;
-    font: bold 1.6em;
     font-size: 38px;
 }
 
@@ -90,6 +147,7 @@ body {
     color: white;
     font-size: 25px !important;
     margin-left: 15px;
+    cursor: pointer;
 }
 
 .games-list {
