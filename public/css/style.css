@@ -30,7 +30,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 70vw;
-    border-right: solid 1px white;
+    border-right: solid 3px white;
     padding: 15px;
 }
 
@@ -38,7 +38,6 @@ body {
     font-family: 'Hubballi', cursive;
     font-size: 25px;
     color: white;
-    border-bottom: solid 1px white;
     height: 56vh;
 }
 
