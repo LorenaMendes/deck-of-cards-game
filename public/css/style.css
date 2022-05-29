@@ -1,0 +1,195 @@
+body {
+    /* background-image: url("https://img.freepik.com/free-photo/abstract-background-green-felt-casino-table_266732-23795.jpg?w=2000"); */
+    background-color: green;
+    background-repeat: no-repeat;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.empty-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 3px solid green;
+    font-size: 50px;
+    color: cornsilk;
+}
+
+.clickable-text {
+    color: orange;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    width: 70vw;
+    border-right: solid 3px white;
+    padding: 15px;
+}
+
+.game-data {
+    font-family: 'Hubballi', cursive;
+    font-size: 25px;
+    color: white;
+    height: 56vh;
+}
+
+.game-data-title {
+    display: flex;
+    justify-content: center;
+    font-size: 50px;
+    color: white;
+}
+
+.deck-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.deck-left-info {
+    height: 27vw;
+}
+
+.text-and-icons {
+    display: flex;
+    flex-direction: row;
+    font: bold 1.6em;
+}
+
+.add-player {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.input-add {
+    width: 200px !important;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 15px;
+}
+
+.data-details {
+    padding-top: 15px;
+    font-family: 'Hubballi', cursive;
+    height: 37vh;
+}
+
+.player-cards-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 69vw;
+    height: 180px;
+    overflow-x: auto;
+}
+
+.card-img {
+    width: 100px;
+    margin-right: 5px;
+}
+
+.deal-cards-menu {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    margin-right: 15px;
+    justify-content: right;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+    height: 150px;
+    background-color: white;
+    margin-right: 5px;
+}
+
+.card-face {
+    font-size: 50px;
+}
+
+.card-symbol {
+    font-size: 40px;
+}
+
+.red-card {
+    color: red;
+}
+
+.black-card {
+    color: black;
+}
+
+.cards-by-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 25px;
+    background-color: white;
+    padding: 20px;
+    margin-right: 25px;
+}
+
+.cards-by-type-block {
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.game-data-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+    height: 98vh;
+    padding-right: 70px;
+}
+
+.add-game {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.section-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Hubballi', cursive;
+    font-size: 38px;
+}
+
+.icon {
+    color: white;
+    font-size: 25px !important;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.games-list {
+    font-family: 'Hubballi', cursive;
+    font-size: 25px;
+    color: white;
+}
