@@ -1,0 +1,99 @@
+body {
+    /* background-image: url("https://img.freepik.com/free-photo/abstract-background-green-felt-casino-table_266732-23795.jpg?w=2000"); */
+    background-color: green;
+    background-repeat : no-repeat;
+}
+
+.content { 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left { 
+    display: flex;
+    flex-direction: column;
+    width: 70vw;
+    border-right: solid 1px white;
+    padding-left: 15px;
+}
+
+.game-data {
+    font-family: 'Hubballi', cursive;
+    font-size: 25px;
+    color: white;
+    border-bottom: solid 1px white;
+    height: 56vh;
+}
+
+.game-data-title {
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+    color: white;
+}
+
+.deck-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-and-icons {
+    display: flex;
+    flex-direction: row;
+    font: bold 1.6em;
+}
+
+.add-player {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.input-add {
+    width: 200px !important;
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 15px;
+}
+
+.right { 
+    display: flex;
+    flex-direction: column;
+    height: 98vh;
+    padding-right: 70px;
+}
+
+.item-with-add {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+}
+
+.section-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+    color: white;
+    font-family: 'Hubballi', cursive;
+    font: bold 1.6em;
+    font-size: 38px;
+}
+
+.icon {
+    color: white;
+    font-size: 25px !important;
+    margin-left: 15px;
+}
+
+.games-list {
+    font-family: 'Hubballi', cursive;
+    font-size: 25px;
+    color: white;
+}
