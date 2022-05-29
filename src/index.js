@@ -12,8 +12,6 @@ app.use('/public', express.static('./public/')); // Use custom JS and CSS files
  * CLASSES
  */
 
-const Suits = ['hearts','spades','clubs','diamonds']
-
 class Card {
     constructor(suit, value) {
         this.suit = suit;
@@ -38,6 +36,8 @@ class Card {
     }
 }
 
+const Suits = ['hearts','spades','clubs','diamonds'];
+
 class Deck {
     constructor() {
         this.cards = [];
@@ -46,22 +46,24 @@ class Deck {
             for(var i=0; i<13; i++) this.cards.push(new Card(suit, i+1));
         }
     }
-
-    shuffle(){}
 }
 
 class Game {
     constructor(nick){
         this.undealt = [];
-        this.decks = 0
+        this.decks = 0;
+        this.cHearts = 0;
+        this.cSpades = 0;
+        this.cClubs = 0;
+        this.cDiamonds = 0;
         this.deadCards = 0;
         this.players = {};
         this.id = uuidv4();
         this.nick = nick;
     }
 
-    addPlayer(pid) {
-        this.players[pid] = PLAYERS[pid];
+    addPlayer(player) {
+        this.players[player.id] = player;
     }
     
     removePlayer(pid) {
@@ -72,6 +74,56 @@ class Game {
         var deck = new Deck();
         this.undealt.push(...deck.cards);
         this.decks++;
+        this.cHearts += 13;
+        this.cSpades += 13;
+        this.cClubs += 13;
+        this.cDiamonds += 13;
+    }
+
+    dealCards(pid, qt) {
+        for (let i = 0; i < qt; i++) {
+            var top = this.undealt.pop();
+            switch (top.suit) {
+                case 'hearts':
+                    this.cHearts--;
+                    break;
+                case 'spades':
+                    this.cSpades--;
+                    break;
+                case 'clubs':
+                    this.cClubs--;
+                    break;
+                case 'diamonds':
+                    this.cDiamonds--;
+                    break;
+            }
+            this.players[pid].cards.push(top);       
+            this.players[pid].score += top.value;       
+        }
+    }
+
+    shuffleDeck() {
+        let len = this.undealt.length;
+        for (let i = 0; i < len; i++) {
+            let rand = Math.floor(Math.random() * len);
+            let temp = this.undealt[i];
+            this.undealt[i] = this.undealt[rand];
+            this.undealt[rand] = temp;
+        }
+    }
+
+    countSuitValue() {
+        let count = {
+            'hearts': {'A':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0,'J':0,'Q':0,'K':0},
+            'spades': {'A':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0,'J':0,'Q':0,'K':0},
+            'clubs': {'A':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0,'J':0,'Q':0,'K':0},
+            'diamonds': {'A':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0,'8':0,'9':0,'10':0,'J':0,'Q':0,'K':0}
+        };
+
+        for (var card of this.undealt) {
+            count[card.suit][card.face]++; 
+        }
+        return count;
     }
 }
 
@@ -82,26 +134,16 @@ class Player {
         this.nick = nick;
         this.score = 0;
     }
-
-    getScore() {
-        var score = 0;
-        for(var card of this.cards){
-            score += card.value;
-        }
-        this.score = score;
-    }
 }
 
 /**
  * GLOBAL DATA
  */
 var GAMES = {};
-var PLAYERS = {};
 
 /**
  * GET GAMES
  */
-
 app.get('/api/get/games', (req, res) => {
     res.json({
         games: GAMES, 
@@ -111,7 +153,6 @@ app.get('/api/get/games', (req, res) => {
 /**
  * GET A GAME
  */
-
 app.get('/api/get/game', (req, res) => {
     var gid = req.query.gid;
 
@@ -148,6 +189,17 @@ app.get('/api/remove/game', (req, res) => {
 });
 
 /**
+ * GET PLAYERS
+ */
+app.get('/api/get/players', (req, res) => {
+    var gid = req.query.gid;
+    
+    return res.json({
+        players: GAMES[gid].players
+    });
+});
+
+/**
  * GET A PLAYER
  */
 app.get('/api/get/player', (req, res) => {
@@ -173,9 +225,8 @@ app.get('/api/add/player', (req, res) => {
     }
 
     var player = new Player(nick);
-    PLAYERS[player.id] = player;
 
-    GAMES[gid].addPlayer(player.id);
+    GAMES[gid].addPlayer(player);
     
     return res.json({
         result: 'success'
@@ -193,8 +244,6 @@ app.get('/api/remove/player', (req, res) => {
 
     GAMES[gid].removePlayer(pid);
     
-    delete PLAYERS[pid];
-    
     res.json({
         result: 'success'
     });
@@ -208,14 +257,16 @@ app.get('/api/add/player_cards', (req, res) => {
     var pid = req.query.pid;
     var qt = req.query.qt;
 
-    if(qt > GAMES[gid].undealt.length) qt = GAMES[gid].undealt.length;
-    
-    for (let i = 0; i < qt; i++) {
-        var top = GAMES[gid].undealt.pop();
-        GAMES[gid].players[pid].cards.push(top);       
+    if(GAMES[gid].undealt.length == 0){
+        return res.json({
+            result: 'No cards on the deck!'
+        });
     }
-    GAMES[gid].players[pid].getScore();
-    
+
+    if(qt > GAMES[gid].undealt.length) qt = GAMES[gid].undealt.length;
+
+    GAMES[gid].dealCards(pid, qt);
+
     res.json({
         result: 'success'
     });
@@ -234,8 +285,40 @@ app.get('/api/add/deck', (req, res) => {
     });
 });
 
+/**
+ * ADD A DECK
+ */
+app.get('/api/shuffle/deck', (req, res) => {
+    var gid = req.query.gid;
+
+    if(GAMES[gid].undealt.length == 0){
+        return res.json({
+            result: 'No cards to shuffle!'
+        });
+    }
+    
+    GAMES[gid].shuffleDeck();
+    
+    res.json({
+        result: 'Deck shuffled!'
+    });
+});
+
+/**
+ * GET DECK DETAILS
+ */
+app.get('/api/detail/deck', (req, res) => {
+    var gid = req.query.gid;
+    
+    let count = GAMES[gid].countSuitValue();
+    console.log(JSON.stringify(count))
+    
+    res.json({
+        count: count
+    });
+});
+
 app.get('/', (req, res) => {
-    console.log(GAMES);
     res.render('index', {GAMES});
 });
 
