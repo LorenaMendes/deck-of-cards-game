@@ -30,9 +30,9 @@ cd deck-of-cards-game
 npm install
 ```
 
-5. Run the application
+3. Run the application
 ```bash
 npm start
 ```
 
-6. Access the application at http://localhost:3333.
+4. Access the application at http://localhost:3333.
